@@ -1,10 +1,9 @@
 var GamePiece;
-var GameObstacle;
+var GameObstacles = [];
 
 function startGame() {
     GameArea.start();
     GamePiece = new Component(25, 25, "green", 10, 120);
-    GameObstacle = new Component(10, 200, "red", 300, 120);
 }
 
 var GameArea = {
@@ -14,6 +13,7 @@ var GameArea = {
         this.canvas.height = 270;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        this.frame_no = 0;
         this.interval = setInterval(updateGameArea, 20);
 
         window.addEventListener('keydown', function(e) {
@@ -32,6 +32,13 @@ var GameArea = {
         clearInterval(this.interval);
     }
 };
+
+function everyInterval(n) {
+    if ((GameArea.frame_no / n) % 1 == 0) {
+        return true;
+    }
+    return false;
+}
 
 function Component(width, height, color, x, y) {
     this.gamearea = GameArea;
@@ -81,11 +88,28 @@ function Component(width, height, color, x, y) {
 
 function updateGameArea() {
 
-    if (GamePiece.crashWith(GameObstacle)) {
-        GameArea.stop();
+    var x, y;
+    for (var i = 0; i < GameObstacles.length; i++) {
+
+        if (GamePiece.crashWith(GameObstacles[i])) {
+            GameArea.stop();
+            return;
+        }
     }
 
     GameArea.clear();
+    GameArea.frame_no++;
+
+    if (GameArea.frame_no == 1 || everyInterval(150)) {
+        x = GameArea.canvas.width;
+        y = GameArea.canvas.height - 200;
+        GameObstacles.push(new Component(10, 200, "red", x, y));
+    }
+
+    for (i = 0; i < GameObstacles.length; i += 1) {
+        GameObstacles[i].x += -1;
+        GameObstacles[i].update();
+    }
 
     // Movements
     GamePiece.speed_x = 0;
@@ -97,5 +121,4 @@ function updateGameArea() {
 
     GamePiece.newPos();
     GamePiece.update();
-    GameObstacle.update();
 }
