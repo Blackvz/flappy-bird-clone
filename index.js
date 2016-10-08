@@ -4,7 +4,8 @@ var GameScore;
 
 function startGame() {
     GameArea.start();
-    GamePiece = new Component(25, 25, "green", 10, 120);
+    //GamePiece = new Component(25, 25, "green", 10, 120);
+    GamePiece = new Component(30, 30, "assets/images/player_bird.png", 10, 120, "image");
     GameScore = new Component("30px", null, "black", 280, 40, "text");
 }
 
@@ -44,6 +45,12 @@ function everyInterval(n) {
 
 function Component(width, height, color, x, y, type) {
     this.type = type;
+
+    if (this.type == "image") {
+        this.image = new Image();
+        this.image.src = color;
+    }
+
     this.width = width;
     this.height = height;
     this.speed_x = 0;
@@ -58,7 +65,15 @@ function Component(width, height, color, x, y, type) {
             canvas_context.font = this.width + " " + this.height;
             canvas_context.fillStyle = color;
             canvas_context.fillText(this.text, this.x, this.y);
-        } else {
+        }
+        else if (this.type == "image") {
+            canvas_context.drawImage(
+                this.image,
+                this.x,
+                this.y,
+                this.width, this.height);
+        }
+        else {
             canvas_context.fillStyle = color;
             canvas_context.fillRect(this.x, this.y, this.width, this.height);
         }
@@ -135,23 +150,36 @@ function updateGameArea() {
     }
 
     // Movements
-    GamePiece.speed_x = 0;
-    GamePiece.speed_y = 0;
-    if (GameArea.keys && GameArea.keys[37]) {
-        GamePiece.speed_x = -2;
-    }
-    if (GameArea.keys && GameArea.keys[39]) {
-        GamePiece.speed_x = 2;
-    }
-    if (GameArea.keys && GameArea.keys[38]) {
-        GamePiece.speed_y = -2;
-    }
-    if (GameArea.keys && GameArea.keys[40]) {
-        GamePiece.speed_y = 2;
-    }
+    clearMovement();
+    move(GameArea.keys);
 
     GameScore.text = "SCORE: " + GameArea.frame_no;
     GameScore.update();
     GamePiece.newPos();
     GamePiece.update();
+}
+
+function clearMovement() {
+    GamePiece.image.src = "assets/images/player_bird.png";
+
+    GamePiece.speed_x = 0;
+    GamePiece.speed_y = 0;
+}
+
+function move(keys) {
+
+    if (keys && keys[37]) {
+        GamePiece.speed_x = -2;
+    }
+    if (keys && keys[39]) {
+        GamePiece.speed_x = 2;
+    }
+    if (keys && keys[38]) {
+        GamePiece.image.src = "assets/images/bird_player_up.png";
+        GamePiece.speed_y = -2;
+    }
+    if (keys && keys[40]) {
+        GamePiece.image.src = "assets/images/bird_player_down.png";
+        GamePiece.speed_y = 2;
+    }
 }
