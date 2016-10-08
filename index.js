@@ -40,6 +40,10 @@ var GameArea = {
     }
 };
 
+/**
+ * @param {int} n
+ * @returns {boolean}
+ */
 function everyInterval(n) {
     if ((GameArea.frame_no / n) % 1 == 0) {
         return true;
@@ -47,6 +51,16 @@ function everyInterval(n) {
     return false;
 }
 
+/**
+ *
+ * @param {string|int} width
+ * @param {string|int} height
+ * @param {string} color
+ * @param {int} x
+ * @param {int} y
+ * @param {string} type
+ * @constructor
+ */
 function Component(width, height, color, x, y, type) {
     this.type = type;
 
@@ -154,7 +168,6 @@ function updateGameArea() {
         GameObstacles[i].update();
     }
 
-    // Movements
     clearMovement();
     move(GameArea.keys);
 
@@ -171,6 +184,9 @@ function clearMovement() {
     GamePiece.speed_y = 0;
 }
 
+/**
+ * @param {array} keys
+ */
 function move(keys) {
 
     if (keys && keys[37]) {
@@ -189,6 +205,12 @@ function move(keys) {
     }
 }
 
+/**
+ *
+ * @param {string} src
+ * @param {boolean} loop
+ * @constructor
+ */
 function Sound(src, loop) {
     this.sound = document.createElement("audio");
     this.sound.src = src;
