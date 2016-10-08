@@ -22,6 +22,8 @@ var GameArea = {
 function Component(width, height, color, x, y) {
     this.width = width;
     this.height = height;
+    this.speed_x = 0;
+    this.speed_y = 0;
     this.x = x;
     this.y = y;
 
@@ -29,10 +31,37 @@ function Component(width, height, color, x, y) {
         var canvas_context = GameArea.context;
         canvas_context.fillStyle = color;
         canvas_context.fillRect(this.x, this.y, this.width, this.height);
+    };
+
+    this.newPos = function() {
+        this.x += this.speed_x;
+        this.y += this.speed_y;
     }
 }
 
 function updateGameArea() {
     GameArea.clear();
+    GamePiece.newPos();
     GamePiece.update();
+}
+
+function moveUp() {
+    GamePiece.speed_y -= 1;
+}
+
+function moveDown() {
+    GamePiece.speed_y += 1;
+}
+
+function moveRight() {
+    GamePiece.speed_x += 1;
+}
+
+function moveLeft() {
+    GamePiece.speed_x -= 1;
+}
+
+function stopMove() {
+    GamePiece.speed_x = 0;
+    GamePiece.speed_y = 0;
 }
