@@ -16,19 +16,19 @@ var GameArea = {
         this.frame_no = 0;
         this.interval = setInterval(updateGameArea, 20);
 
-        window.addEventListener('keydown', function(e) {
+        window.addEventListener('keydown', function (e) {
             GameArea.keys = (GameArea.keys || []);
             GameArea.keys[e.keyCode] = true;
         });
 
-        window.addEventListener('keyup', function(e) {
+        window.addEventListener('keyup', function (e) {
             GameArea.keys[e.keyCode] = false;
         });
     },
-    clear: function() {
+    clear: function () {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     },
-    stop: function() {
+    stop: function () {
         clearInterval(this.interval);
     }
 };
@@ -49,18 +49,18 @@ function Component(width, height, color, x, y) {
     this.x = x;
     this.y = y;
 
-    this.update = function() {
+    this.update = function () {
         var canvas_context = GameArea.context;
         canvas_context.fillStyle = color;
         canvas_context.fillRect(this.x, this.y, this.width, this.height);
     };
 
-    this.newPos = function() {
+    this.newPos = function () {
         this.x += this.speed_x;
         this.y += this.speed_y;
     };
 
-    this.crashWith = function(other_obj) {
+    this.crashWith = function (other_obj) {
         var left = this.x;
         var right = this.x + (this.width);
         var top = this.y;
@@ -100,10 +100,23 @@ function updateGameArea() {
     GameArea.clear();
     GameArea.frame_no++;
 
+    var min_height;
+    var max_height;
+    var min_gap;
+    var max_gap;
+    var gap;
     if (GameArea.frame_no == 1 || everyInterval(150)) {
         x = GameArea.canvas.width;
-        y = GameArea.canvas.height - 200;
-        GameObstacles.push(new Component(10, 200, "red", x, y));
+        min_height = 20;
+        max_height = 200;
+
+        height = Math.floor(Math.random() * (max_height - min_height + 1) + min_height);
+        min_gap = 50;
+        max_gap = 150;
+        gap = Math.floor(Math.random() * (max_gap - min_gap + 1) + min_gap);
+
+        GameObstacles.push(new Component(10, height, "red", x, 0));
+        GameObstacles.push(new Component(10, x - height - gap, "red", x, height + gap));
     }
 
     for (i = 0; i < GameObstacles.length; i += 1) {
@@ -114,10 +127,18 @@ function updateGameArea() {
     // Movements
     GamePiece.speed_x = 0;
     GamePiece.speed_y = 0;
-    if (GameArea.keys && GameArea.keys[37]) {GamePiece.speed_x = -2; }
-    if (GameArea.keys && GameArea.keys[39]) {GamePiece.speed_x = 2; }
-    if (GameArea.keys && GameArea.keys[38]) {GamePiece.speed_y = -2; }
-    if (GameArea.keys && GameArea.keys[40]) {GamePiece.speed_y = 2; }
+    if (GameArea.keys && GameArea.keys[37]) {
+        GamePiece.speed_x = -2;
+    }
+    if (GameArea.keys && GameArea.keys[39]) {
+        GamePiece.speed_x = 2;
+    }
+    if (GameArea.keys && GameArea.keys[38]) {
+        GamePiece.speed_y = -2;
+    }
+    if (GameArea.keys && GameArea.keys[40]) {
+        GamePiece.speed_y = 2;
+    }
 
     GamePiece.newPos();
     GamePiece.update();
