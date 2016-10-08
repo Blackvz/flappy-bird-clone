@@ -8,7 +8,7 @@ function startGame() {
     GameArea.start();
     GamePiece = new Component(30, 30, "assets/images/player_bird.png", 10, 120, "image");
     GameScore = new Component("30px", null, "black", 280, 40, "text");
-    GameOverSound = new Sound("assets/sounds/game_over.mp3", false);
+    GameOverSound = new Sound("assets/sounds/game_over.ogg", false);
     GameBackgroundMusic = new Sound("assets/sounds/background_music.ogg", true);
     GameBackgroundMusic.play();
 }
