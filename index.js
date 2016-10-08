@@ -112,7 +112,6 @@ function Component(width, height, color, x, y, type) {
 
 function updateGameArea() {
 
-    var x, y;
     for (var i = 0; i < GameObstacles.length; i++) {
 
         if (GamePiece.crashWith(GameObstacles[i])) {
@@ -130,6 +129,7 @@ function updateGameArea() {
     var max_gap;
     var gap;
     var height;
+    var x;
     if (GameArea.frame_no == 1 || everyInterval(150)) {
         x = GameArea.canvas.width;
         min_height = 20;
@@ -144,8 +144,8 @@ function updateGameArea() {
         GameObstacles.push(new Component(10, x - height - gap, "red", x, height + gap));
     }
 
-    for (i = 0; i < GameObstacles.length; i += 1) {
-        GameObstacles[i].x += -1;
+    for (i = 0; i < GameObstacles.length; i++) {
+        GameObstacles[i].x -= 1;
         GameObstacles[i].update();
     }
 
@@ -169,14 +169,14 @@ function clearMovement() {
 function move(keys) {
 
     if (keys && keys[37]) {
-        GamePiece.speed_x = -2;
+        GamePiece.speed_x -= 2;
     }
     if (keys && keys[39]) {
         GamePiece.speed_x = 2;
     }
     if (keys && keys[38]) {
         GamePiece.image.src = "assets/images/bird_player_up.png";
-        GamePiece.speed_y = -2;
+        GamePiece.speed_y -= 2;
     }
     if (keys && keys[40]) {
         GamePiece.image.src = "assets/images/bird_player_down.png";
