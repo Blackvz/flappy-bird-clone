@@ -1,12 +1,16 @@
 var GamePiece;
 var GameObstacles = [];
 var GameScore;
+var GameOverSound;
+var GameBackgroundMusic;
 
 function startGame() {
     GameArea.start();
-    //GamePiece = new Component(25, 25, "green", 10, 120);
     GamePiece = new Component(30, 30, "assets/images/player_bird.png", 10, 120, "image");
     GameScore = new Component("30px", null, "black", 280, 40, "text");
+    GameOverSound = new Sound("assets/sounds/game_over.mp3", false);
+    GameBackgroundMusic = new Sound("assets/sounds/background_music.mp3", true);
+    GameBackgroundMusic.play();
 }
 
 var GameArea = {
@@ -19,12 +23,12 @@ var GameArea = {
         this.frame_no = 0;
         this.interval = setInterval(updateGameArea, 20);
 
-        window.addEventListener('keydown', function (e) {
+        window.addEventListener("keydown", function (e) {
             GameArea.keys = (GameArea.keys || []);
             GameArea.keys[e.keyCode] = true;
         });
 
-        window.addEventListener('keyup', function (e) {
+        window.addEventListener("keyup", function (e) {
             GameArea.keys[e.keyCode] = false;
         });
     },
@@ -115,8 +119,9 @@ function updateGameArea() {
     for (var i = 0; i < GameObstacles.length; i++) {
 
         if (GamePiece.crashWith(GameObstacles[i])) {
+            GameBackgroundMusic.stop();
+            GameOverSound.play();
             GameArea.stop();
-            return;
         }
     }
 
@@ -182,4 +187,24 @@ function move(keys) {
         GamePiece.image.src = "assets/images/bird_player_down.png";
         GamePiece.speed_y = 2;
     }
+}
+
+function Sound(src, loop) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    if (loop) {
+        this.sound.loop = true;
+    }
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+
+    this.play = function() {
+        this.sound.play();
+    };
+
+    this.stop = function() {
+        this.sound.pause();
+    };
 }
