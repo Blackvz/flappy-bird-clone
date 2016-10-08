@@ -1,9 +1,11 @@
 var GamePiece;
 var GameObstacles = [];
+var GameScore;
 
 function startGame() {
     GameArea.start();
     GamePiece = new Component(25, 25, "green", 10, 120);
+    GameScore = new Component("30px", null, "black", 280, 40, "text");
 }
 
 var GameArea = {
@@ -40,8 +42,8 @@ function everyInterval(n) {
     return false;
 }
 
-function Component(width, height, color, x, y) {
-    this.gamearea = GameArea;
+function Component(width, height, color, x, y, type) {
+    this.type = type;
     this.width = width;
     this.height = height;
     this.speed_x = 0;
@@ -51,8 +53,15 @@ function Component(width, height, color, x, y) {
 
     this.update = function () {
         var canvas_context = GameArea.context;
-        canvas_context.fillStyle = color;
-        canvas_context.fillRect(this.x, this.y, this.width, this.height);
+
+        if (this.type == "text") {
+            canvas_context.font = this.width + " " + this.height;
+            canvas_context.fillStyle = color;
+            canvas_context.fillText(this.text, this.x, this.y);
+        } else {
+            canvas_context.fillStyle = color;
+            canvas_context.fillRect(this.x, this.y, this.width, this.height);
+        }
     };
 
     this.newPos = function () {
@@ -105,6 +114,7 @@ function updateGameArea() {
     var min_gap;
     var max_gap;
     var gap;
+    var height;
     if (GameArea.frame_no == 1 || everyInterval(150)) {
         x = GameArea.canvas.width;
         min_height = 20;
@@ -140,6 +150,8 @@ function updateGameArea() {
         GamePiece.speed_y = 2;
     }
 
+    GameScore.text = "SCORE: " + GameArea.frame_no;
+    GameScore.update();
     GamePiece.newPos();
     GamePiece.update();
 }
