@@ -104,6 +104,7 @@ function Component(width, height, color, x, y, type) {
         this.x += this.speed_x;
         this.y += (this.speed_y + this.gravity_speed);
         this.hitBottom();
+        this.hitTop()
     };
 
     this.hitBottom = function() {
@@ -112,6 +113,12 @@ function Component(width, height, color, x, y, type) {
         if (this.y > canvas_bottom) {
             this.y = canvas_bottom;
         }
+    };
+
+    this.hitTop = function() {
+      if (this.y < 0) {
+        this.y = 0;
+      }
     };
 
     this.crashWith = function (other_obj) {
