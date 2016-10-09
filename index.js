@@ -73,6 +73,8 @@ function Component(width, height, color, x, y, type) {
     this.height = height;
     this.speed_x = 0;
     this.speed_y = 0;
+    this.gravity = 0.05;
+    this.gravity_speed = 0;
     this.x = x;
     this.y = y;
 
@@ -98,8 +100,18 @@ function Component(width, height, color, x, y, type) {
     };
 
     this.newPos = function () {
+        this.gravity_speed += this.gravity;
         this.x += this.speed_x;
-        this.y += this.speed_y;
+        this.y += (this.speed_y + this.gravity_speed);
+        this.hitBottom();
+    };
+
+    this.hitBottom = function() {
+        var canvas_bottom = GameArea.canvas.height - this.height;
+
+        if (this.y > canvas_bottom) {
+            this.y = canvas_bottom;
+        }
     };
 
     this.crashWith = function (other_obj) {
@@ -126,6 +138,10 @@ function Component(width, height, color, x, y, type) {
         return crash;
 
     }
+}
+
+function jump(n) {
+    GamePiece.gravity = n;
 }
 
 function updateGameArea() {
@@ -182,6 +198,7 @@ function clearMovement() {
 
     GamePiece.speed_x = 0;
     GamePiece.speed_y = 0;
+    GamePiece.gravity = 0.05;
 }
 
 /**
@@ -202,6 +219,10 @@ function move(keys) {
     if (keys && keys[40]) {
         GamePiece.image.src = "assets/images/bird_player_down.png";
         GamePiece.speed_y = 2;
+    }
+
+    if (keys && keys[32]) {
+        jump(-0.2);
     }
 }
 
