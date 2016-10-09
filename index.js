@@ -141,7 +141,8 @@ function Component(width, height, color, x, y, type) {
 }
 
 function jump(n) {
-    GamePiece.gravity = n;
+    GamePiece.gravity_speed = 0;
+    GamePiece.y -= n;
 }
 
 function updateGameArea() {
@@ -191,7 +192,6 @@ function updateGameArea() {
     GameScore.update();
     GamePiece.newPos();
     GamePiece.update();
-    debugGame();
 }
 
 function clearMovement() {
@@ -217,7 +217,7 @@ function debugGame() {
 function move(keys) {
 
     if (keys && keys[32]) {
-        jump(-0.2);
+        jump(3);
         GamePiece.image.src = "assets/images/bird_player_up.png";
     }
 }
