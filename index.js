@@ -1,3 +1,5 @@
+"use strict";
+
 var GamePiece;
 var GameObstacles = [];
 var GameScore;
@@ -22,6 +24,7 @@ var GameArea = {
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.frame_no = 0;
         this.interval = setInterval(updateGameArea, 20);
+        this.keys = [];
 
         window.addEventListener("keydown", function (e) {
             GameArea.keys = (GameArea.keys || []);
