@@ -175,8 +175,8 @@ function updateGameArea() {
         max_gap = 150;
         gap = Math.floor(Math.random() * (max_gap - min_gap + 1) + min_gap);
 
-        GameObstacles.push(new Component(10, height, "red", x, 0));
-        GameObstacles.push(new Component(10, x - height - gap, "red", x, height + gap));
+        GameObstacles.push(new Component(10, height, "red", x, 0, "obstacle"));
+        GameObstacles.push(new Component(10, x - height - gap, "red", x, height + gap, "obstacle"));
     }
 
     for (i = 0; i < GameObstacles.length; i++) {
@@ -201,28 +201,23 @@ function clearMovement() {
     GamePiece.gravity = 0.05;
 }
 
+function debugGame() {
+    console.log(
+        "Player xpos: " + GamePiece.speed_x + "\n"
+        + "Player ypos: " + GamePiece.speed_y + "\n"
+        + "Player gravity: " + GamePiece.gravity + "\n"
+        + "Player gravity_speed: " + GamePiece.gravity_speed + "\n"
+    );
+}
+
 /**
  * @param {array} keys
  */
 function move(keys) {
 
-    if (keys && keys[37]) {
-        GamePiece.speed_x -= 2;
-    }
-    if (keys && keys[39]) {
-        GamePiece.speed_x = 2;
-    }
-    if (keys && keys[38]) {
-        GamePiece.image.src = "assets/images/bird_player_up.png";
-        GamePiece.speed_y -= 2;
-    }
-    if (keys && keys[40]) {
-        GamePiece.image.src = "assets/images/bird_player_down.png";
-        GamePiece.speed_y = 2;
-    }
-
     if (keys && keys[32]) {
         jump(-0.2);
+        GamePiece.image.src = "assets/images/bird_player_up.png";
     }
 }
 
