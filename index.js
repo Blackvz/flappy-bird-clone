@@ -191,6 +191,7 @@ function updateGameArea() {
     GameScore.update();
     GamePiece.newPos();
     GamePiece.update();
+    debugGame();
 }
 
 function clearMovement() {
@@ -203,8 +204,8 @@ function clearMovement() {
 
 function debugGame() {
     console.log(
-        "Player xpos: " + GamePiece.speed_x + "\n"
-        + "Player ypos: " + GamePiece.speed_y + "\n"
+        "Player xpos: " + GamePiece.x + "\n"
+        + "Player ypos: " + GamePiece.y + "\n"
         + "Player gravity: " + GamePiece.gravity + "\n"
         + "Player gravity_speed: " + GamePiece.gravity_speed + "\n"
     );
